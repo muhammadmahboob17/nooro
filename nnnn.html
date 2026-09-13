@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Customer Service</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<style>
+:root{
+  --bg:#08160e; --card:#0f2a1c; --card2:#0b2014; --black:#04100a;
+  --gold:#d4af37; --gold2:#f5d76e; --white:#f6f6f6; --muted:#9db3a5;
+  --green:#16a34a; --red:#dc2626; --amber:#f59e0b;
+  --radius:20px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg);color:var(--white);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font-family:inherit}
+.hidden{display:none !important}
+.app{max-width:480px;margin:0 auto;min-height:100vh;padding-bottom:96px;position:relative;overflow-x:hidden}
+@media(min-width:900px){.app{max-width:1100px;padding-bottom:0}}
+.header{background:linear-gradient(135deg,#04100a 0%,#0f2a1c 100%);padding:16px 18px;border-bottom:1px solid rgba(212,175,55,.18);position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:12px}
+.header .logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--gold) 0%,var(--gold2) 100%);display:flex;align-items:center;justify-content:center;color:#04100a;font-size:20px;box-shadow:0 4px 14px rgba(212,175,55,.35)}
+.header h1{font-size:16px;letter-spacing:1px;color:var(--gold)}
+.header .sub{font-size:11px;color:var(--muted);margin-top:2px}
+.header .logout{margin-left:auto;color:var(--muted);font-size:18px;padding:8px;background:none;border:none;cursor:pointer}
+.card{background:var(--card);border:1px solid rgba(212,175,55,.15);border-radius:var(--radius);padding:18px;margin:14px;box-shadow:0 6px 24px rgba(0,0,0,.35)}
+.card.black{background:var(--black);}
+.card h2{font-size:16px;color:var(--gold);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.card h3{font-size:14px;color:var(--gold2);margin-bottom:8px}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;letter-spacing:.4px}
+.input-wrap{position:relative;display:flex;align-items:center}
+.input,select.input,textarea.input{width:100%;background:var(--card2);border:1px solid rgba(212,175,55,.22);border-radius:14px;padding:14px;color:var(--white);font-size:15px;outline:none;transition:border .2s, box-shadow .2s}
+.input:focus,select.input:focus,textarea.input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,175,55,.12)}
+.input::placeholder{color:#557a68}
+.input-wrap .eye{position:absolute;right:12px;color:var(--muted);padding:8px;cursor:pointer}
+.btn{width:100%;padding:15px;border:none;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;transition:transform .08s, box-shadow .2s;letter-spacing:.3px;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn:active{transform:scale(.98)}
+.btn-gold{background:linear-gradient(135deg,var(--gold) 0%,var(--gold2) 100%);color:#04100a;box-shadow:0 6px 18px rgba(212,175,55,.3)}
+.btn-ghost{background:transparent;border:1px solid rgba(212,175,55,.4);color:var(--gold)}
+.btn-red{background:var(--red);color:#fff}
+.btn-green{background:var(--green);color:#fff}
+.btn-sm{padding:10px 14px;font-size:13px;width:auto}
+.btn-row{display:flex;gap:10px}
+.plan-grid{display:grid;gap:12px}
+@media(min-width:600px){.plan-grid{grid-template-columns:repeat(3,1fr)}}
+.plan{background:var(--card2);border:2px solid rgba(212,175,55,.18);border-radius:18px;padding:18px;text-align:center;cursor:pointer;transition:all .2s;position:relative}
+.plan.active{border-color:var(--gold);background:linear-gradient(135deg,rgba(212,175,55,.12),rgba(212,175,55,.02));box-shadow:0 8px 24px rgba(212,175,55,.15)}
+.plan .days{font-size:22px;font-weight:700;color:var(--gold);margin-bottom:4px}
+.plan .price{font-size:13px;color:var(--muted)}
+.plan .total{margin-top:10px;padding-top:10px;border-top:1px dashed rgba(212,175,55,.25);font-size:14px;font-weight:600;color:var(--gold2)}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:600}
+.badge.green{background:rgba(22,163,74,.18);color:#4ade80}
+.badge.red{background:rgba(220,38,38,.18);color:#f87171}
+.badge.amber{background:rgba(245,158,11,.18);color:#fbbf24}
+.badge.gray{background:rgba(148,163,184,.15);color:#94a3b8}
+.acct{background:var(--card2);border:1px solid rgba(212,175,55,.15);border-radius:16px;padding:14px;margin-bottom:12px}
+.acct h4{font-size:13px;color:var(--gold2);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:60;background:linear-gradient(180deg,#04100a 0%,#0a1f14 100%);border-top:1px solid rgba(212,175,55,.2);display:flex;justify-content:space-around;padding:10px 0 14px;max-width:480px;margin:0 auto}
+@media(min-width:900px){.bottom-nav{display:none}}
+.nav-item{flex:1;text-align:center;color:var(--muted);font-size:10px;cursor:pointer;padding:4px;transition:color .2s}
+.nav-item i{display:block;font-size:18px;margin-bottom:3px}
+.nav-item.active{color:var(--gold)}
+.tabs{display:flex;overflow-x:auto;gap:8px;padding:12px 14px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;padding:9px 14px;border-radius:999px;background:var(--card2);border:1px solid rgba(212,175,55,.18);color:var(--muted);font-size:13px;cursor:pointer;white-space:nowrap}
+.tab.active{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#04100a;border-color:var(--gold);font-weight:600}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:0 14px}
+.stat{background:var(--card);border:1px solid rgba(212,175,55,.15);border-radius:16px;padding:14px}
+.stat .n{font-size:26px;font-weight:700;color:var(--gold)}
+.stat .l{font-size:11px;color:var(--muted);margin-top:4px;letter-spacing:.4px}
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-120%);background:var(--card);border:1px solid var(--gold);color:var(--white);padding:12px 18px;border-radius:14px;font-size:13px;z-index:9999;box-shadow:0 10px 30px rgba(0,0,0,.5);transition:transform .3s;max-width:90vw;text-align:center}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.copy{background:rgba(212,175,55,.15);border:1px solid rgba(212,175,55,.3);color:var(--gold);padding:8px 14px;border-radius:10px;font-size:12px;cursor:pointer}
+.upload{border:2px dashed rgba(212,175,55,.35);border-radius:14px;padding:22px;text-align:center;cursor:pointer;background:var(--card2);transition:all .2s}
+.upload.has{border-style:solid;border-color:var(--green);background:rgba(22,163,74,.08)}
+.upload i{font-size:26px;color:var(--gold);margin-bottom:8px;display:block}
+.upload .hint{color:var(--muted);font-size:12px;margin-top:4px}
+.divider{height:1px;background:rgba(212,175,55,.15);margin:14px 0}
+.row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;font-size:13px}
+.row .k{color:var(--muted)}
+.row .v{color:var(--white);font-weight:600;text-align:right;max-width:60%}
+.empty{text-align:center;padding:40px 20px;color:var(--muted)}
+.empty i{font-size:40px;margin-bottom:12px;opacity:.4;display:block}
+.mono{font-family:ui-monospace,Menlo,monospace;letter-spacing:.5px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9998;display:flex;align-items:center;justify-content:center;padding:16px}
+.modal-box{background:var(--card);border:1px solid var(--gold);border-radius:20px;padding:20px;max-width:440px;width:100%;max-height:90vh;overflow:auto}
+.modal-box h2{color:#f87171;margin-bottom:12px;font-size:16px;display:flex;align-items:center;gap:8px}
+.reason-opt{display:flex;gap:10px;align-items:flex-start;padding:12px;background:var(--card2);border:1px solid rgba(212,175,55,.15);border-radius:12px;margin-bottom:8px;cursor:pointer;font-size:13px}
+.reason-opt:hover{border-color:var(--gold)}
+.reason-opt input{margin-top:3px}
+</style>
+</head>
+<body>
+<div id="toast" class="toast"></div>
+<div class="app" id="app"></div>
+<div class="bottom-nav hidden" id="bottomNav"></div>
+
+<script>
+/* =========================================================
+   LOCAL DATABASE (localStorage with quota handling)
+========================================================= */
+const DB = {
+  get(k, def){ try{ return JSON.parse(localStorage.getItem(k)) ?? def }catch{ return def } },
+  set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch(e){ return false; } },
+  customers: () => DB.get("cs_customers", []),
+  saveCustomers: v => { if(!DB.set("cs_customers", v)) toast("⚠️ Storage full!"); },
+  payments: () => DB.get("cs_payments", []),
+  savePayments: v => { if(!DB.set("cs_payments", v)) toast("⚠️ Storage full! Purana data clear karein."); },
+  attendance: () => DB.get("cs_attendance", []),
+  saveAttendance: v => { DB.set("cs_attendance", v); },
+  admins: () => DB.get("cs_admins", [{ username:"admin", password:"12341234a2" }]),
+  session: () => DB.get("cs_session", null),
+  saveSession: v => DB.set("cs_session", v),
+  clearSession: () => localStorage.removeItem("cs_session"),
+  meta: () => DB.get("cs_meta", { nextCustomerId: 1, nextPlanId: 1, nextPaymentId: 1, nextNumberId: 1 }),
+  saveMeta: v => DB.set("cs_meta", v),
+};
+
+const PLANS = {
+  "1_DAY":  { days: 1,  price: 10,  label: "1 Day Plan"  },
+  "7_DAY":  { days: 7,  price: 50,  label: "7 Day Plan"  },
+  "15_DAY": { days: 15, price: 100, label: "15 Day Plan" },
+};
+
+const EASYPAISA = { owner: "Noor Muhammad", number: "03428182981" };
+
+const $ = sel => document.querySelector(sel);
+const app = () => $("#app");
+const toast = (msg, ms=2800) => {
+  const t = $("#toast"); if(!t) return;
+  t.textContent = msg; t.classList.add("show");
+  clearTimeout(t._t); t._t = setTimeout(()=>t.classList.remove("show"), ms);
+};
+const fmt = n => "Rs. " + Number(n).toLocaleString();
+const today = () => new Date().toISOString().slice(0,10);
+const nowISO = () => new Date().toISOString();
+const dateAdd = (dateStr, days) => {
+  const d = new Date(dateStr + "T00:00:00Z");
+  d.setUTCDate(d.getUTCDate() + days);
+  return d.toISOString().slice(0,10);
+};
+const daysLeft = (expiry) => {
+  if (!expiry) return 0;
+  const ms = new Date(expiry + "T23:59:59Z") - new Date();
+  return Math.max(0, Math.ceil(ms / 86400000));
+};
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const uid = ()=> Math.random().toString(36).slice(2,10);
+
+/* Force admin password */
+(function(){
+  const admins = DB.admins();
+  const found = admins.find(a => a.username === "admin");
+  if (!found || found.password !== "12341234a2"){
+    DB.set("cs_admins", [{ username:"admin", password:"12341234a2" }]);
+  }
+})();
+
+const Routes = {
+  "/": "landing", "/register": "register", "/login": "login",
+  "/dashboard": "dashboard", "/plan": "plan", "/play": "play",
+  "/attendance": "attendance", "/profile": "profile",
+  "/admin/login": "adminLogin", "/admin": "adminDashboard",
+  "/admin/payments": "adminPayments", "/admin/customers": "adminCustomers",
+  "/admin/attendance": "adminAttendance", "/admin/history": "adminHistory",
+};
+
+function navigate(path){
+  if (location.hash !== "#" + path) history.pushState(null, "", "#" + path);
+  render();
+}
+window.addEventListener("hashchange", render);
+window.addEventListener("popstate", render);
+function currentPath(){ return (location.hash || "#/").slice(1); }
+
+/* =========================================================
+   RENDER — session aware
+========================================================= */
+function render(){
+  const path = currentPath();
+  const route = Routes[path] || "notFound";
+  const session = DB.session();
+  const nav = $("#bottomNav");
+
+  const customerRoutes = ["dashboard","plan","play","attendance","profile"];
+  const adminRoutes = ["adminDashboard","adminPayments","adminCustomers","adminAttendance","adminHistory"];
+  const authRoutes = ["landing","login","register","adminLogin"];
+
+  if (customerRoutes.includes(route)){
+    if (!session || session.role !== "CUSTOMER"){
+      if (session && session.role === "ADMIN"){ location.hash = "#/admin"; return; }
+      location.hash = "#/login"; return;
+    }
+  }
+  if (adminRoutes.includes(route)){
+    if (!session || session.role !== "ADMIN"){
+      if (session && session.role === "CUSTOMER"){ location.hash = "#/dashboard"; return; }
+      location.hash = "#/admin/login"; return;
+    }
+  }
+  if (session && authRoutes.includes(route)){
+    if (session.role === "ADMIN"){ location.hash = "#/admin"; return; }
+    if (session.role === "CUSTOMER"){ location.hash = "#/dashboard"; return; }
+  }
+
+  const Views = {
+    landing, register, login, dashboard, plan, play, attendance, profile,
+    adminLogin, adminDashboard, adminPayments, adminCustomers, adminAttendance, adminHistory,
+    notFound,
+  };
+  app().innerHTML = Views[route]();
+
+  const customerNav = ["dashboard","plan","play","attendance","profile"];
+  if (customerNav.includes(route)){
+    nav.classList.remove("hidden");
+    nav.innerHTML = [
+      ["dashboard","🏠","Home"], ["plan","📋","Plan"], ["play","🎮","Play"],
+      ["attendance","📅","Attendance"], ["profile","👤","Profile"],
+    ].map(([r,i,l]) =>
+      `<div class="nav-item ${r===route?'active':''}" onclick="navigate('/${r}')">
+         <span style="font-size:18px">${i}</span>${l}
+       </div>`
+    ).join("");
+  } else {
+    nav.classList.add("hidden");
+    nav.innerHTML = "";
+  }
+  window.scrollTo(0,0);
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+function header(title="CUSTOMER SERVICE", subtitle="Fast • Simple • Secure", showLogout=false){
+  return `
+  <div class="header">
+    <div class="logo"><i class="fa-solid fa-shield-halved"></i></div>
+    <div><h1>${title}</h1><div class="sub">${subtitle}</div></div>
+    ${showLogout ? `<button class="logout" onclick="doLogout()"><i class="fa-solid fa-right-from-bracket"></i></button>` : ""}
+  </div>`;
+}
+
+/* =========================================================
+   LANDING
+========================================================= */
+function landing(){
+  return `
+  ${header()}
+  <div class="card" style="margin-top:30px;text-align:center">
+    <div style="font-size:56px;margin:10px 0">🛡️</div>
+    <h2 style="justify-content:center;font-size:20px">Welcome</h2>
+    <p style="color:var(--muted);font-size:13px;margin:8px 0 22px">Manage your plans, payments and daily tasks with ease.</p>
+    <button class="btn btn-gold" style="margin-bottom:10px" onclick="navigate('/register')">
+      <i class="fa-solid fa-user-plus"></i> Register
+    </button>
+    <button class="btn btn-ghost" onclick="navigate('/login')">
+      <i class="fa-solid fa-right-to-bracket"></i> Customer Login
+    </button>
+    <div class="divider"></div>
+    <button class="btn btn-ghost" onclick="navigate('/admin/login')" style="font-size:12px">
+      <i class="fa-solid fa-user-shield"></i> Admin Login
+    </button>
+  </div>
+  <div style="text-align:center;color:var(--muted);font-size:11px;padding:20px">
+    Demo build • Data stored locally in your browser
+  </div>`;
+}
+
+/* =========================================================
+   REGISTER
+========================================================= */
+let regState = null;
+function register(){
+  regState = regState || { firstName:"", plan:"", numberCount:1, numbers:[{phone:"", pw:""}], slip:null };
+  while (regState.numbers.length < regState.numberCount) regState.numbers.push({phone:"",pw:""});
+  regState.numbers = regState.numbers.slice(0, regState.numberCount);
+
+  const nums = Array.from({length: regState.numberCount}, (_,i)=>{
+    const n = regState.numbers[i];
+    return `
+    <div class="acct">
+      <h4><i class="fa-solid fa-mobile-screen"></i> My Telenor Account ${i+1}</h4>
+      <div class="field">
+        <label>Mobile Number</label>
+        <input class="input mono" inputmode="numeric" maxlength="11" placeholder="03XXXXXXXXX"
+          value="${esc(n.phone)}" oninput="regNumChange(${i},'phone',this.value)">
+      </div>
+      <div class="field" style="margin-bottom:0">
+        <label>My Telenor Login Password</label>
+        <div class="input-wrap">
+          <input class="input" type="password" id="pw-${i}" placeholder="********"
+            value="${esc(n.pw)}" oninput="regNumChange(${i},'pw',this.value)">
+          <span class="eye" onclick="togglePw(${i})"><i class="fa-solid fa-eye"></i></span>
+        </div>
+      </div>
+    </div>`;
+  }).join("");
+
+  const total = regState.plan && PLANS[regState.plan]
+    ? PLANS[regState.plan].price * regState.numberCount : 0;
+
+  return `
+  ${header()}
+  <div class="card">
+    <h2><i class="fa-solid fa-user-plus"></i> Register</h2>
+    <div class="field">
+      <label>First Name</label>
+      <input class="input" id="reg-name" placeholder="Your first name"
+        value="${esc(regState.firstName)}" oninput="regState.firstName=this.value">
+    </div>
+    <div class="field">
+      <label>Number of Accounts</label>
+      <div class="btn-row" style="gap:8px;flex-wrap:wrap">
+        ${[1,2,3,4].map(n=>`
+          <button class="btn ${regState.numberCount===n?'btn-gold':'btn-ghost'}"
+            style="padding:12px;flex:1;min-width:70px"
+            onclick="regSetCount(${n})">${n}</button>
+        `).join("")}
+      </div>
+      <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:6px">
+        ${regState.numberCount} Number${regState.numberCount>1?'s':''} selected
+      </div>
+    </div>
+    <div class="divider"></div>
+    <h3 style="margin-bottom:10px">My Telenor Accounts</h3>
+    <div id="accts">${nums}</div>
+    <div class="divider"></div>
+    <h3 style="margin-bottom:10px">Select Plan</h3>
+    <div class="plan-grid">
+      ${Object.entries(PLANS).map(([key,p])=>`
+        <div class="plan ${regState.plan===key?'active':''}" onclick="regSetPlan('${key}')">
+          <div class="days">${p.days} Day${p.days>1?'s':''}</div>
+          <div class="price">Rs. ${p.price} / number</div>
+          <div class="total">Total: ${fmt(p.price * regState.numberCount)}</div>
+        </div>
+      `).join("")}
+    </div>
+    ${total ? `
+    <div class="card black" style="margin:14px 0 0;padding:14px">
+      <div class="row"><span class="k">Calculation</span><span class="v">${regState.numberCount} Number${regState.numberCount>1?'s':''} × Rs. ${PLANS[regState.plan].price}</span></div>
+      <div class="row" style="border-top:1px solid rgba(212,175,55,.15);padding-top:10px">
+        <span class="k">Total Amount</span><span class="v" style="color:var(--gold);font-size:16px">${fmt(total)}</span>
+      </div>
+    </div>` : ""}
+    <div class="divider"></div>
+    <button class="btn btn-gold" onclick="submitRegistration()">
+      <i class="fa-solid fa-arrow-right"></i> Continue to Payment
+    </button>
+    <div style="text-align:center;margin-top:12px">
+      <a style="color:var(--muted);font-size:12px" href="#/login">Already registered? Login</a>
+    </div>
+  </div>`;
+}
+function togglePw(i){
+  const el = document.getElementById("pw-"+i);
+  el.type = el.type === "password" ? "text" : "password";
+}
+function regNumChange(i, key, val){
+  if (key==="phone") val = val.replace(/\D/g,"").slice(0,11);
+  regState.numbers[i][key] = val;
+}
+function regSetCount(n){
+  regState.numberCount = n;
+  while (regState.numbers.length < n) regState.numbers.push({phone:"",pw:""});
+  regState.numbers = regState.numbers.slice(0, n);
+  render();
+}
+function regSetPlan(p){ regState.plan = p; render(); }
+
+function submitRegistration(){
+  const name = regState.firstName.trim();
+  if (!name) return toast("Please enter your first name");
+  if (!regState.plan) return toast("Please select a plan");
+  for (let i=0;i<regState.numberCount;i++){
+    const n = regState.numbers[i];
+    if (!/^03\d{9}$/.test(n.phone)) return toast(`Account ${i+1}: Enter valid number (03XXXXXXXXX)`);
+    if (!n.pw || n.pw.length < 3) return toast(`Account ${i+1}: Enter password`);
+  }
+  const meta = DB.meta();
+  const customerId = meta.nextCustomerId++;
+  const customers = DB.customers();
+
+  const numbers = regState.numbers.map(n=>({
+    id: "n" + (meta.nextNumberId++),
+    phone: n.phone, pw: n.pw, status: "ACTIVE",
+  }));
+
+  const plan = {
+    id: "p" + (meta.nextPlanId++),
+    planName: regState.plan,
+    durationDays: PLANS[regState.plan].days,
+    pricePerNumber: PLANS[regState.plan].price,
+    numberOfAccounts: regState.numberCount,
+    totalPrice: PLANS[regState.plan].price * regState.numberCount,
+    startDate: null, expiryDate: null, status: "WAITING",
+    createdAt: nowISO(),
+  };
+
+  const customer = {
+    id: "c" + customerId, firstName: name,
+    accountCount: regState.numberCount, numbers, plan,
+    createdAt: nowISO(),
+  };
+  customers.push(customer);
+  DB.saveCustomers(customers);
+  DB.saveMeta(meta);
+
+  regState = { ...regState, createdCustomerId: customer.id, slip: null };
+  showPaymentView();
+}
+
+/* =========================================================
+   PAYMENT VIEW + SLIP UPLOAD (compressed)
+========================================================= */
+function showPaymentView(){
+  const cid = regState.createdCustomerId;
+  const customer = DB.customers().find(c=>c.id===cid);
+  const plan = customer.plan;
+
+  app().innerHTML = `
+  ${header()}
+  <div class="card">
+    <h2><i class="fa-solid fa-credit-card"></i> Payment</h2>
+    <p style="color:var(--muted);font-size:13px;margin-bottom:14px">
+      Send the total amount to the Easypaisa account below, then upload your transaction slip.
+    </p>
+    <div class="card black" style="margin:0 0 14px">
+      <div style="text-align:center;padding:6px 0">
+        <div style="color:var(--gold);font-size:12px;letter-spacing:1px">EASYPAISA PAYMENT</div>
+        <div style="font-size:14px;color:var(--muted);margin-top:6px">Account Owner</div>
+        <div style="font-size:16px;font-weight:700;margin-bottom:10px">${EASYPAISA.owner}</div>
+        <div style="font-size:14px;color:var(--muted)">Easypaisa Number</div>
+        <div class="mono" style="font-size:20px;color:var(--gold);font-weight:700;letter-spacing:2px;margin:6px 0 12px">
+          ${EASYPAISA.number}
+        </div>
+        <button class="copy" onclick="copyEasypaisa()">
+          <i class="fa-solid fa-copy"></i> COPY NUMBER
+        </button>
+      </div>
+    </div>
+    <div class="card black" style="margin:0 0 14px">
+      <div class="row"><span class="k">Customer</span><span class="v">${esc(customer.firstName)}</span></div>
+      <div class="row"><span class="k">Accounts</span><span class="v">${plan.numberOfAccounts} Number${plan.numberOfAccounts>1?'s':''}</span></div>
+      <div class="row"><span class="k">Plan</span><span class="v">${PLANS[plan.planName].label}</span></div>
+      <div class="row" style="border-top:1px solid rgba(212,175,55,.15);margin-top:6px;padding-top:10px">
+        <span class="k">Total</span><span class="v" style="color:var(--gold);font-size:16px">${fmt(plan.totalPrice)}</span>
+      </div>
+    </div>
+    <p style="color:var(--muted);font-size:12px;text-align:center;margin-bottom:12px">
+      «Please send the total calculated amount to the Easypaisa account above and upload your transaction slip below.»
+    </p>
+    <div class="upload ${regState.slip?'has':''}" onclick="document.getElementById('slip').click()">
+      <i class="fa-solid ${regState.slip?'fa-circle-check':'fa-cloud-arrow-up'}"
+         style="color:${regState.slip?'var(--green)':'var(--gold)'}"></i>
+      <div style="font-weight:600;font-size:14px">
+        ${regState.slip ? "Transaction Slip Attached ✓" : "Choose Transaction Slip"}
+      </div>
+      <div class="hint">JPG, PNG, PDF • Max 2 MB</div>
+    </div>
+    <input type="file" id="slip" accept=".jpg,.jpeg,.png,.pdf" class="hidden" onchange="handleSlip(this)">
+    <div class="divider"></div>
+    <button class="btn btn-gold" onclick="submitPayment()">
+      <i class="fa-solid fa-paper-plane"></i> SUBMIT REQUEST
+    </button>
+  </div>`;
+}
+function copyEasypaisa(){
+  navigator.clipboard.writeText(EASYPAISA.number).then(()=>toast("Easypaisa number copied ✓"));
+}
+function compressImage(dataUrl, maxDim, quality, callback){
+  const img = new Image();
+  img.onload = () => {
+    let { width, height } = img;
+    if (width > height && width > maxDim){ height = Math.round((height * maxDim) / width); width = maxDim; }
+    else if (height > maxDim){ width = Math.round((width * maxDim) / height); height = maxDim; }
+    const canvas = document.createElement("canvas");
+    canvas.width = width; canvas.height = height;
+    canvas.getContext("2d").drawImage(img, 0, 0, width, height);
+    callback(canvas.toDataURL("image/jpeg", quality));
+  };
+  img.onerror = () => callback(dataUrl);
+  img.src = dataUrl;
+}
+function handleSlip(input){
+  const f = input.files[0];
+  if (!f) return;
+  if (f.size > 2*1024*1024) return toast("File too large (max 2 MB). Compress the image.");
+  const reader = new FileReader();
+  reader.onload = e => {
+    const data = e.target.result;
+    if (f.type.startsWith("image/")){
+      compressImage(data, 700, 0.6, compressed => {
+        regState.slip = { name:f.name, data: compressed };
+        showPaymentView();
+      });
+    } else {
+      regState.slip = { name:f.name, data };
+      showPaymentView();
+    }
+  };
+  reader.readAsDataURL(f);
+}
+function submitPayment(){
+  if (!regState.slip) return toast("Please attach your transaction slip");
+  const cid = regState.createdCustomerId;
+  const meta = DB.meta();
+  const payments = DB.payments();
+  const newPayment = {
+    id: "pay" + (meta.nextPaymentId++),
+    customerId: cid,
+    amount: DB.customers().find(c=>c.id===cid).plan.totalPrice,
+    slipName: regState.slip.name,
+    slipData: regState.slip.data,
+    submittedAt: nowISO(),
+    approvedAt: null,
+    status: "PENDING",
+    adminNote: "",
+  };
+  payments.push(newPayment);
+
+  try {
+    const str = JSON.stringify(payments);
+    localStorage.setItem("cs_payments", str);
+  } catch(err){
+    payments.pop();
+    return toast("❌ Storage full! Browser data clear karein.");
+  }
+  DB.saveMeta(meta);
+
+  app().innerHTML = `
+  ${header()}
+  <div class="card" style="text-align:center;margin-top:30px">
+    <div style="font-size:56px;margin:12px 0">⏳</div>
+    <h2 style="justify-content:center">Payment Verification In Process</h2>
+    <p style="color:var(--muted);font-size:13px;margin:10px 0 20px">
+      Your transaction slip has been submitted successfully. Your payment is currently under verification.
+    </p>
+    <div class="badge amber" style="margin:0 auto 20px;display:inline-flex">
+      <i class="fa-solid fa-clock"></i> PAYMENT PENDING
+    </div>
+    <button class="btn btn-gold" onclick="navigate('/login')">
+      <i class="fa-solid fa-right-to-bracket"></i> Go to Login
+    </button>
+  </div>`;
+  regState = null;
+}
+
+/* =========================================================
+   LOGIN / LOGOUT
+========================================================= */
+function login(){
+  return `
+  ${header()}
+  <div class="card" style="margin-top:30px">
+    <h2><i class="fa-solid fa-right-to-bracket"></i> Customer Login</h2>
+    <p style="color:var(--muted);font-size:12px;margin-bottom:14px">
+      Login using your first name and any of your registered mobile numbers.
+    </p>
+    <div class="field">
+      <label>First Name</label>
+      <input class="input" id="login-name" placeholder="Your first name">
+    </div>
+    <div class="field">
+      <label>Mobile Number</label>
+      <input class="input mono" id="login-phone" inputmode="numeric" maxlength="11" placeholder="03XXXXXXXXX">
+    </div>
+    <button class="btn btn-gold" onclick="doLogin()">
+      <i class="fa-solid fa-right-to-bracket"></i> Login
+    </button>
+    <div style="text-align:center;margin-top:12px">
+      <a style="color:var(--muted);font-size:12px" href="#/register">Create new account</a>
+    </div>
+  </div>`;
+}
+function doLogin(){
+  const name = $("#login-name").value.trim().toLowerCase();
+  const phone = $("#login-phone").value.trim();
+  const c = DB.customers().find(x =>
+    x.firstName.toLowerCase() === name && x.numbers.some(n => n.phone === phone)
+  );
+  if (!c) return toast("No matching account found");
+  DB.saveSession({ role:"CUSTOMER", customerId: c.id, name: c.firstName });
+  location.hash = "#/dashboard"; render();
+}
+function doLogout(){
+  DB.clearSession();
+  toast("Logged out");
+  location.hash = "#/"; render();
+}
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+function dashboard(){
+  const s = DB.session();
+  const c = DB.customers().find(x=>x.id===s.customerId);
+  if (!c){ doLogout(); return; }
+  const plan = c.plan;
+  const payment = [...DB.payments()].reverse().find(p=>p.customerId===c.id);
+  const payStatus = payment?.status || "PENDING";
+
+  const planStatus = plan.status === "ACTIVE"
+    ? (plan.expiryDate && new Date(plan.expiryDate + "T23:59:59Z") < new Date() ? "EXPIRED" : "ACTIVE")
+    : plan.status;
+
+  const remaining = planStatus === "ACTIVE" ? daysLeft(plan.expiryDate) : 0;
+
+  if (planStatus === "EXPIRED" && plan.status !== "EXPIRED"){
+    plan.status = "EXPIRED";
+    const customers = DB.customers().map(x=>x.id===c.id?{...x,plan}:x);
+    DB.saveCustomers(customers);
+  }
+
+  let planBadge = "";
+  if (planStatus === "ACTIVE") planBadge = `<span class="badge green"><i class="fa-solid fa-circle-check"></i> ACTIVE</span>`;
+  else if (planStatus === "EXPIRED") planBadge = `<span class="badge red"><i class="fa-solid fa-circle-xmark"></i> EXPIRED</span>`;
+  else planBadge = `<span class="badge amber"><i class="fa-solid fa-clock"></i> WAITING FOR APPROVAL</span>`;
+
+  let payBadge = "";
+  if (payStatus === "APPROVED") payBadge = `<span class="badge green"><i class="fa-solid fa-circle-check"></i> APPROVED</span>`;
+  else if (payStatus === "REJECTED") payBadge = `<span class="badge red"><i class="fa-solid fa-circle-xmark"></i> REJECTED</span>`;
+  else payBadge = `<span class="badge amber"><i class="fa-solid fa-clock"></i> PENDING VERIFICATION</span>`;
+
+  let msg = "";
+  if (payStatus === "APPROVED" && planStatus === "ACTIVE"){
+    msg = `
+      <div class="card" style="background:linear-gradient(135deg,rgba(22,163,74,.22),rgba(22,163,74,.06));border:2px solid rgba(22,163,74,.5);text-align:center">
+        <div style="font-size:48px;margin-bottom:8px">🎉</div>
+        <h2 style="justify-content:center;color:#4ade80;margin-bottom:8px">Payment Approved!</h2>
+        <p style="font-size:14px;line-height:1.5;color:#d1fae5">
+          Congratulations! Your payment has been approved and your plan is now <b>ACTIVE</b>.
+        </p>
+        <div style="margin-top:12px;padding-top:12px;border-top:1px dashed rgba(74,222,128,.3)">
+          <div style="font-size:12px;color:var(--muted)">Plan expires on</div>
+          <div style="font-size:18px;color:var(--gold);font-weight:700;margin-top:4px">${plan.expiryDate}</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px">${remaining} days remaining</div>
+        </div>
+      </div>`;
+  } else if (payStatus === "APPROVED" && planStatus === "EXPIRED"){
+    msg = `<div class="card" style="background:rgba(220,38,38,.12);border:2px solid rgba(220,38,38,.4);text-align:center">
+      <div style="font-size:42px;margin-bottom:8px">⏰</div>
+      <h2 style="justify-content:center;color:#f87171">Plan Expired</h2>
+      <p style="font-size:13px;color:#fecaca">Your plan has expired. Please purchase a new plan to continue.</p>
+    </div>`;
+  } else if (payStatus === "REJECTED"){
+    msg = `<div class="card" style="background:rgba(220,38,38,.12);border:2px solid rgba(220,38,38,.4)">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <div style="font-size:32px">❌</div>
+        <h2 style="color:#f87171;margin:0">Payment Rejected</h2>
+      </div>
+      <p style="font-size:13px;color:#fecaca;margin-bottom:10px">
+        Your payment request was rejected. Please check the Admin message below and submit valid payment proof.
+      </p>
+      <div style="background:rgba(0,0,0,.3);padding:12px;border-radius:12px;border-left:3px solid #f87171">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:4px">ADMIN MESSAGE</div>
+        <div style="font-size:13px;color:#fff">${esc(payment?.adminNote || "Payment proof could not be verified.")}</div>
+      </div>
+    </div>`;
+  } else if (payStatus === "PENDING" && planStatus === "WAITING"){
+    msg = `<div class="card" style="background:linear-gradient(135deg,rgba(245,158,11,.2),rgba(245,158,11,.06));border:2px solid rgba(245,158,11,.5);text-align:center">
+      <div style="font-size:42px;margin-bottom:8px">⏳</div>
+      <h2 style="justify-content:center;color:#fbbf24">Payment Verification In Process</h2>
+      <p style="font-size:13px;color:#fef3c7;margin-top:8px">
+        Your transaction slip has been submitted successfully.<br>
+        Your payment is currently under verification.
+      </p>
+      <p style="font-size:12px;color:var(--muted);margin-top:10px">
+        Please wait for admin approval. This page updates automatically.
+      </p>
+    </div>`;
+  } else if (planStatus === "ACTIVE" && remaining <= 2){
+    msg = `<div class="card" style="background:rgba(245,158,11,.12);border:2px solid rgba(245,158,11,.4)">
+      ⚠️ Your plan is about to expire (${remaining} day${remaining===1?'':'s'} left). Please renew to continue the service.
+    </div>`;
+  }
+
+  return `
+  ${header("CUSTOMER SERVICE","Fast • Simple • Secure", true)}
+  ${msg}
+  <div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <h2 style="margin:0"><i class="fa-solid fa-id-card"></i> Customer Profile</h2>
+      <button onclick="render()" class="copy" style="padding:6px 10px">
+        <i class="fa-solid fa-rotate"></i> Refresh
+      </button>
+    </div>
+    <div class="row"><span class="k">Name</span><span class="v">${esc(c.firstName)}</span></div>
+    <div class="row"><span class="k">Number of Accounts</span><span class="v">${c.accountCount}</span></div>
+    <div class="row"><span class="k">Plan</span><span class="v">${PLANS[plan.planName].label}</span></div>
+    <div class="row"><span class="k">Price Per Number</span><span class="v">Rs. ${plan.pricePerNumber}</span></div>
+    <div class="row"><span class="k">Total Amount</span><span class="v" style="color:var(--gold)">${fmt(plan.totalPrice)}</span></div>
+    <div class="row"><span class="k">Payment Status</span><span class="v">${payBadge}</span></div>
+    <div class="row"><span class="k">Plan Status</span><span class="v">${planBadge}</span></div>
+    <div class="row"><span class="k">Start Date</span><span class="v">${plan.startDate || "—"}</span></div>
+    <div class="row"><span class="k">Expiry Date</span><span class="v">${plan.expiryDate || "—"}</span></div>
+    <div class="row"><span class="k">Remaining Days</span><span class="v" style="color:var(--gold)">${planStatus==="ACTIVE"?remaining:"—"}</span></div>
+  </div>
+  <div style="height:100px"></div>`;
+}
+
+/* =========================================================
+   PLAN / PLAY / ATTENDANCE / PROFILE
+========================================================= */
+function plan(){
+  const s = DB.session();
+  const c = DB.customers().find(x=>x.id===s.customerId);
+  const plan = c.plan;
+  const payment = [...DB.payments()].reverse().find(p=>p.customerId===c.id);
+  return `
+  ${header("CUSTOMER SERVICE","Fast • Simple • Secure", true)}
+  <div class="card">
+    <h2><i class="fa-solid fa-clipboard-list"></i> Current Plan</h2>
+    <div class="row"><span class="k">Plan</span><span class="v">${PLANS[plan.planName].label}</span></div>
+    <div class="row"><span class="k">Duration</span><span class="v">${plan.durationDays} Days</span></div>
+    <div class="row"><span class="k">Accounts</span><span class="v">${plan.numberOfAccounts} Number${plan.numberOfAccounts>1?'s':''}</span></div>
+    <div class="row"><span class="k">Price / Number</span><span class="v">Rs. ${plan.pricePerNumber}</span></div>
+    <div class="row"><span class="k">Total</span><span class="v" style="color:var(--gold);font-size:16px">${fmt(plan.totalPrice)}</span></div>
+  </div>
+  <div class="card">
+    <h2><i class="fa-solid fa-credit-card"></i> Payment Info</h2>
+    <div class="row"><span class="k">Status</span><span class="v">${
+      payment?.status==="APPROVED"?'<span class="badge green">APPROVED</span>':
+      payment?.status==="REJECTED"?'<span class="badge red">REJECTED</span>':
+      '<span class="badge amber">PENDING</span>'
+    }</span></div>
+    <div class="row"><span class="k">Submitted</span><span class="v">${payment ? new Date(payment.submittedAt).toLocaleString() : "—"}</span></div>
+    ${payment?.approvedAt?`<div class="row"><span class="k">Approved</span><span class="v">${new Date(payment.approvedAt).toLocaleString()}</span></div>`:""}
+    ${payment?.adminNote?`<div class="row"><span class="k">Admin Note</span><span class="v">${esc(payment.adminNote)}</span></div>`:""}
+  </div>
+  <div class="card">
+    <h2><i class="fa-solid fa-wallet"></i> Payment Method</h2>
+    <div style="text-align:center;padding:4px 0">
+      <div style="color:var(--gold);font-size:12px;letter-spacing:1px">EASYPAISA</div>
+      <div style="font-size:14px;color:var(--muted);margin-top:6px">${EASYPAISA.owner}</div>
+      <div class="mono" style="font-size:20px;color:var(--gold);font-weight:700;letter-spacing:2px;margin:6px 0 12px">${EASYPAISA.number}</div>
+      <button class="copy" onclick="copyEasypaisa()"><i class="fa-solid fa-copy"></i> COPY NUMBER</button>
+    </div>
+  </div>
+  <div style="height:100px"></div>`;
+}
+
+function play(){
+  const s = DB.session();
+  const c = DB.customers().find(x=>x.id===s.customerId);
+  const plan = c.plan;
+  const isActive = plan.status==="ACTIVE" && plan.expiryDate && new Date(plan.expiryDate+"T23:59:59Z") >= new Date();
+  if (!isActive){
+    return `${header("CUSTOMER SERVICE","Fast • Simple • Secure", true)}
+    <div class="card" style="text-align:center;margin-top:30px">
+      <div style="font-size:56px;margin:12px 0">🔒</div>
+      <h2 style="justify-content:center">Plan Not Active</h2>
+      <p style="color:var(--muted);font-size:13px;margin:10px 0 20px">
+        ${plan.status==="EXPIRED" ? "Your plan has expired. Please purchase a new plan to continue." : "Your plan is waiting for admin approval."}
+      </p>
+    </div>`;
+  }
+  const records = DB.attendance().filter(a=>a.customerId===c.id && a.date===today());
+  const rows = c.numbers.map((n,i)=>{
+    const rec = records.find(r=>r.numberId===n.id);
+    const status = rec?.status || "PENDING";
+    const badge = status==="PRESENT" ? '<span class="badge green"><i class="fa-solid fa-circle-check"></i> DONE</span>'
+              : status==="INCOMPLETE" ? '<span class="badge red"><i class="fa-solid fa-circle-xmark"></i> INCOMPLETE</span>'
+              : '<span class="badge amber"><i class="fa-solid fa-clock"></i> PENDING</span>';
+    const disabled = status==="PRESENT";
+    return `<div class="acct">
+      <div class="row" style="padding:0 0 8px">
+        <span class="v mono">${esc(n.phone)}</span>${badge}
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px">
+        My Telenor Account ${i+1} • Plan: ${PLANS[plan.planName].label}
+      </div>
+      <button class="btn ${disabled?'btn-ghost':'btn-gold'} btn-sm" onclick="markSelf('${n.id}')" style="width:100%" ${disabled?'disabled':''}>
+        <i class="fa-solid fa-check"></i> ${disabled ? "DONE" : "I completed today's task"}
+      </button>
+    </div>`;
+  }).join("");
+  return `
+  ${header("CUSTOMER SERVICE","Fast • Simple • Secure", true)}
+  <div class="card">
+    <h2><i class="fa-solid fa-gamepad"></i> Play & Win</h2>
+    <div class="row"><span class="k">Today</span><span class="v">${today()}</span></div>
+    <div class="row"><span class="k">Plan</span><span class="v">${PLANS[plan.planName].label}</span></div>
+    <div class="row"><span class="k">Remaining Days</span><span class="v" style="color:var(--gold)">${daysLeft(plan.expiryDate)}</span></div>
+  </div>
+  <div class="card">
+    <h2><i class="fa-solid fa-list-check"></i> Today's Tasks</h2>
+    ${rows}
+    <p style="color:var(--muted);font-size:11px;margin-top:8px">
+      After you complete a task, admin will verify it. Once verified, it shows as ✅ DONE.
+    </p>
+  </div>
+  <div style="height:100px"></div>`;
+}
+function markSelf(numberId){
+  const s = DB.session();
+  const list = DB.attendance();
+  const date = today();
+  const existing = list.find(a => a.numberId===numberId && a.date===date);
+  if (existing){
+    if (existing.status==="PRESENT") return toast("Already marked as PRESENT");
+    existing.status = "PENDING"; existing.markedAt = nowISO(); existing.markedBy = "customer";
+  } else {
+    list.push({ id: uid(), customerId: s.customerId, numberId, date, status:"PENDING", markedAt: nowISO(), markedBy: "customer" });
+  }
+  DB.saveAttendance(list);
+  toast("Task submitted ✓ Waiting for admin verification");
+  render();
+}
+
+function attendance(){
+  const s = DB.session();
+  const c = DB.customers().find(x=>x.id===s.customerId);
+  const all = DB.attendance().filter(a=>a.customerId===c.id);
+  const todayRecords = c.numbers.map((n,i)=>{
+    const rec = all.find(a=>a.numberId===n.id && a.date===today());
+    const status = rec?.status || "PENDING";
+    const badge = status==="PRESENT" ? '<span class="badge green">✅ PRESENT</span>'
+              : status==="INCOMPLETE" ? '<span class="badge red">❌ INCOMPLETE</span>'
+              : '<span class="badge amber">⏳ PENDING</span>';
+    return `<div class="row"><span class="k mono">Number ${i+1} • ${esc(n.phone)}</span><span class="v">${badge}</span></div>`;
+  }).join("");
+  const dates = [...new Set(all.filter(a=>a.date!==today()).map(a=>a.date))].sort().reverse();
+  const history = dates.map(d=>{
+    const recs = all.filter(a=>a.date===d);
+    return `<div class="card black" style="margin:0 0 10px;padding:14px">
+      <div style="font-size:13px;color:var(--gold2);font-weight:600;margin-bottom:8px">
+        <i class="fa-solid fa-calendar"></i> ${d}
+      </div>
+      ${recs.map(r=>{
+        const num = c.numbers.findIndex(n=>n.id===r.numberId);
+        const b = r.status==="PRESENT" ? '<span class="badge green">✅ PRESENT</span>'
+              : r.status==="INCOMPLETE" ? '<span class="badge red">❌ INCOMPLETE</span>'
+              : '<span class="badge amber">⏳ PENDING</span>';
+        return `<div class="row"><span class="k">Number ${num+1}</span><span class="v">${b}</span></div>`;
+      }).join("")}
+    </div>`;
+  }).join("") || `<div class="empty"><i class="fa-solid fa-calendar-xmark"></i>No history yet</div>`;
+  return `
+  ${header("CUSTOMER SERVICE","Fast • Simple • Secure", true)}
+  <div class="card"><h2><i class="fa-solid fa-calendar-day"></i> Today's Attendance</h2>${todayRecords}</div>
+  <div class="card"><h2><i class="fa-solid fa-calendar-days"></i> Attendance History</h2>${history}</div>
+  <div style="height:100px"></div>`;
+}
+
+function profile(){
+  const s = DB.session();
+  const c = DB.customers().find(x=>x.id===s.customerId);
+  const numbers = c.numbers.map((n,i)=>{
+    const rec = DB.attendance().find(a=>a.numberId===n.id && a.date===today());
+    const st = rec?.status || "PENDING";
+    return `<div class="acct">
+      <div class="row" style="padding:0">
+        <span class="v mono">${esc(n.phone)}</span>
+        <span class="badge ${st==="PRESENT"?"green":st==="INCOMPLETE"?"red":"amber"}">${st}</span>
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-top:6px">
+        Account ${i+1} • Registered ${new Date(c.createdAt).toLocaleDateString()}
+      </div>
+    </div>`;
+  }).join("");
+  return `
+  ${header("CUSTOMER SERVICE","Fast • Simple • Secure", true)}
+  <div class="card">
+    <h2><i class="fa-solid fa-user"></i> Profile</h2>
+    <div class="row"><span class="k">Name</span><span class="v">${esc(c.firstName)}</span></div>
+    <div class="row"><span class="k">Accounts</span><span class="v">${c.accountCount}</span></div>
+    <div class="row"><span class="k">Registered</span><span class="v">${new Date(c.createdAt).toLocaleDateString()}</span></div>
+  </div>
+  <div class="card"><h2><i class="fa-solid fa-mobile-screen"></i> My Telenor Numbers</h2>${numbers}</div>
+  <div style="height:100px"></div>`;
+}
+
+/* =========================================================
+   ADMIN LOGIN
+========================================================= */
+function adminLogin(){
+  return `
+  ${header("ADMIN PANEL","Authorized Access Only")}
+  <div class="card" style="margin-top:30px">
+    <h2><i class="fa-solid fa-user-shield"></i> Admin Login</h2>
+    <div class="field">
+      <label>Username</label>
+      <input class="input" id="a-user" placeholder="admin" value="admin">
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <div class="input-wrap">
+        <input class="input" id="a-pass" type="password" placeholder="••••••••">
+        <span class="eye" onclick="const p=document.getElementById('a-pass');p.type=p.type==='password'?'text':'password'"><i class="fa-solid fa-eye"></i></span>
+      </div>
+    </div>
+    <button class="btn btn-gold" onclick="doAdminLogin()">
+      <i class="fa-solid fa-right-to-bracket"></i> Login
+    </button>
+    <div style="text-align:center;margin-top:12px">
+      <a style="color:var(--muted);font-size:12px" href="#/">← Back to customer</a>
+    </div>
+  </div>`;
+}
+function doAdminLogin(){
+  const u = $("#a-user").value.trim();
+  const p = $("#a-pass").value;
+  const admin = DB.admins().find(a => a.username===u && a.password===p);
+  if (!admin) return toast("Invalid credentials");
+  DB.saveSession({ role:"ADMIN", username:u });
+  location.hash = "#/admin"; render();
+}
+function adminTabs(active){
+  const tabs = [
+    ["/admin","📊","Dashboard"],
+    ["/admin/payments","💳","Payments"],
+    ["/admin/customers","👥","Customers"],
+    ["/admin/attendance","📅","Attendance"],
+    ["/admin/history","📜","History"],
+  ];
+  return `<div class="tabs">${tabs.map(([p,i,l])=>
+    `<div class="tab ${p===active?'active':''}" onclick="navigate('${p}')">${i} ${l}</div>`
+  ).join("")}</div>`;
+}
+
+/* =========================================================
+   ADMIN DASHBOARD
+========================================================= */
+function adminDashboard(){
+  const customers = DB.customers();
+  const payments = DB.payments();
+  const attendance = DB.attendance();
+  const pending = payments.filter(p=>p.status==="PENDING").length;
+  const active = customers.filter(c => c.plan.status==="ACTIVE" && c.plan.expiryDate && new Date(c.plan.expiryDate+"T23:59:59Z") >= new Date()).length;
+  const expired = customers.filter(c => c.plan.status==="EXPIRED" || (c.plan.expiryDate && new Date(c.plan.expiryDate+"T23:59:59Z") < new Date())).length;
+  const todayRecs = attendance.filter(a=>a.date===today());
+  const todayPresent = todayRecs.filter(a=>a.status==="PRESENT").length;
+  const todayIncomplete = todayRecs.filter(a=>a.status==="INCOMPLETE").length;
+
+  return `
+  ${header("ADMIN PANEL","Fast • Simple • Secure", true)}
+  ${adminTabs("/admin")}
+  <div class="stats" style="padding:0 14px 8px">
+    <div class="stat"><div class="n">${customers.length}</div><div class="l">TOTAL CUSTOMERS</div></div>
+    <div class="stat"><div class="n">${pending}</div><div class="l">PENDING REQUESTS</div></div>
+    <div class="stat"><div class="n">${active}</div><div class="l">ACTIVE CUSTOMERS</div></div>
+    <div class="stat"><div class="n">${expired}</div><div class="l">EXPIRED CUSTOMERS</div></div>
+    <div class="stat"><div class="n">${todayPresent}</div><div class="l">TODAY'S PRESENT</div></div>
+    <div class="stat"><div class="n">${todayIncomplete}</div><div class="l">TODAY'S INCOMPLETE</div></div>
+  </div>
+  <div class="card">
+    <h2><i class="fa-solid fa-bolt"></i> Quick Actions</h2>
+    <button class="btn btn-gold" style="margin-bottom:8px" onclick="navigate('/admin/payments')">
+      <i class="fa-solid fa-credit-card"></i> Review Payment Requests (${pending})
+    </button>
+    <button class="btn btn-ghost" onclick="navigate('/admin/attendance')">
+      <i class="fa-solid fa-check-double"></i> Mark Today's Attendance
+    </button>
+  </div>
+  <div style="height:30px"></div>`;
+}
+
+/* =========================================================
+   ADMIN PAYMENTS — with modal-based approve/reject
+========================================================= */
+function adminPayments(){
+  const payments = DB.payments().filter(p=>p.status==="PENDING");
+  const cards = payments.map(p=>{
+    const c = DB.customers().find(x=>x.id===p.customerId);
+    if (!c) return "";
+    const plan = c.plan;
+    return `
+    <div class="card black" style="margin:14px 0">
+      <h2><i class="fa-solid fa-receipt"></i> Request #${p.id}</h2>
+      <div class="row"><span class="k">Customer</span><span class="v">${esc(c.firstName)}</span></div>
+      <div class="row"><span class="k">Accounts</span><span class="v">${c.accountCount}</span></div>
+      ${c.numbers.map((n,i)=>`
+        <div class="row"><span class="k">My Telenor #${i+1}</span><span class="v mono">${esc(n.phone)}</span></div>
+        <div class="row"><span class="k">Password #${i+1}</span><span class="v mono" onclick="this.textContent='${esc(n.pw)}'" style="cursor:pointer">•••••• (tap)</span></div>
+      `).join("")}
+      <div class="row"><span class="k">Plan</span><span class="v">${PLANS[plan.planName].label}</span></div>
+      <div class="row"><span class="k">Price / Number</span><span class="v">Rs. ${plan.pricePerNumber}</span></div>
+      <div class="row"><span class="k">Total</span><span class="v" style="color:var(--gold)">${fmt(plan.totalPrice)}</span></div>
+      <div class="row"><span class="k">Submitted</span><span class="v">${new Date(p.submittedAt).toLocaleString()}</span></div>
+      <div class="row"><span class="k">Slip</span><span class="v">
+        <button class="copy" onclick="viewSlip('${p.id}')"><i class="fa-solid fa-image"></i> VIEW</button>
+      </span></div>
+      <div class="divider"></div>
+      <div class="btn-row">
+        <button class="btn btn-green" onclick="approvePayment('${p.id}')"><i class="fa-solid fa-check"></i> ACCEPT</button>
+        <button class="btn btn-red" onclick="showRejectModal('${p.id}')"><i class="fa-solid fa-xmark"></i> REJECT</button>
+      </div>
+    </div>`;
+  }).join("") || `<div class="card"><div class="empty"><i class="fa-solid fa-inbox"></i>No pending requests</div></div>`;
+
+  return `
+  ${header("ADMIN PANEL","Payment Requests", true)}
+  ${adminTabs("/admin/payments")}
+  ${cards}
+  <div style="height:30px"></div>`;
+}
+
+/* Slip viewer modal (no popup blocker issues) */
+function viewSlip(id){
+  const p = DB.payments().find(x=>x.id===id);
+  if (!p) return toast("Payment not found");
+  if (!p.slipData) return toast("No slip attached");
+
+  const old = document.getElementById("slipModal");
+  if (old) old.remove();
+
+  let content = "";
+  if (p.slipData.startsWith("data:image")){
+    content = `<img src="${p.slipData}" style="max-width:100%;max-height:70vh;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,.6);display:block;margin:0 auto">`;
+  } else if (p.slipData.startsWith("data:application/pdf")){
+    content = `<iframe src="${p.slipData}" style="width:100%;height:70vh;border:0;background:#fff;border-radius:12px"></iframe>`;
+  } else {
+    content = `<div style="color:#fff;font-size:14px;text-align:center;padding:20px">Unsupported file</div>`;
+  }
+
+  const modal = document.createElement("div");
+  modal.id = "slipModal";
+  modal.className = "modal";
+  modal.innerHTML = `
+    <div class="modal-box" style="border-color:var(--gold)">
+      <h2 style="color:var(--gold);font-size:14px;margin-bottom:10px">
+        <i class="fa-solid fa-image"></i> ${esc(p.slipName||"Transaction Slip")}
+      </h2>
+      ${content}
+      <button class="btn btn-ghost" style="margin-top:12px" onclick="document.getElementById('slipModal').remove()">
+        <i class="fa-solid fa-xmark"></i> Close
+      </button>
+    </div>`;
+  modal.addEventListener("click", e => { if (e.target === modal) modal.remove(); });
+  document.body.appendChild(modal);
+}
+
+/* Approve with confirm() — mobile pe chalta hai */
+function approvePayment(id){
+  const payments = DB.payments();
+  const p = payments.find(x=>x.id===id);
+  if (!p) return toast("Payment not found");
+  const customers = DB.customers();
+  const c = customers.find(x=>x.id===p.customerId);
+  if (!c) return toast("Customer not found");
+
+  if (!confirm(`Approve ${c.firstName}'s payment of ${fmt(p.amount)}?\n\nPlan will become ACTIVE.`)) return;
+
+  const now = nowISO();
+  const start = today();
+  const expiry = dateAdd(start, c.plan.durationDays);
+
+  p.status = "APPROVED";
+  p.approvedAt = now;
+  c.plan.status = "ACTIVE";
+  c.plan.startDate = start;
+  c.plan.expiryDate = expiry;
+
+  const att = DB.attendance();
+  c.numbers.forEach(n=>{
+    const exists = att.find(a => a.numberId===n.id && a.date===today());
+    if (!exists) att.push({
+      id: uid(), customerId: c.id, numberId: n.id, date: today(),
+      status: "PENDING", markedAt: null, markedBy: null,
+    });
+  });
+
+  DB.savePayments(payments);
+  DB.saveCustomers(customers);
+  DB.saveAttendance(att);
+  toast("✅ Approved! Plan is now ACTIVE.");
+  render();
+}
+
+/* Reject modal (custom — prompt() block hota hai mobile pe) */
+function showRejectModal(id){
+  const old = document.getElementById("rejectModal");
+  if (old) old.remove();
+
+  const reasons = [
+    "Payment proof could not be verified. Please submit valid proof.",
+    "Transaction slip is not clear. Please upload a clearer image.",
+    "Amount sent is incorrect. Please send the correct amount.",
+    "Transaction not found in our Easypaisa account.",
+    "Slip is invalid. Please send genuine proof.",
+  ];
+
+  const modal = document.createElement("div");
+  modal.id = "rejectModal";
+  modal.className = "modal";
+  modal.innerHTML = `
+    <div class="modal-box">
+      <h2><i class="fa-solid fa-circle-xmark"></i> Reject Payment</h2>
+      <p style="color:var(--muted);font-size:12px;margin-bottom:12px">
+        Select a reason to send to the customer:
+      </p>
+      <div>
+        ${reasons.map((r,i)=>`
+          <label class="reason-opt">
+            <input type="radio" name="rejreason" value="${esc(r)}" ${i===0?'checked':''}>
+            <span>${esc(r)}</span>
+          </label>
+        `).join("")}
+      </div>
+      <div style="margin-top:12px">
+        <label style="display:block;font-size:12px;color:var(--muted);margin-bottom:6px">
+          Custom message (optional)
+        </label>
+        <textarea id="customRej" class="input" placeholder="Or type your own reason..." style="min-height:70px;resize:vertical;font-size:13px"></textarea>
+      </div>
+      <div class="btn-row" style="margin-top:14px">
+        <button class="btn btn-ghost" onclick="document.getElementById('rejectModal').remove()">Cancel</button>
+        <button class="btn btn-red" onclick="confirmReject('${id}')">
+          <i class="fa-solid fa-xmark"></i> Reject
+        </button>
+      </div>
+    </div>`;
+  modal.addEventListener("click", e => { if (e.target === modal) modal.remove(); });
+  document.body.appendChild(modal);
+}
+
+function confirmReject(id){
+  const sel = document.querySelector('input[name="rejreason"]:checked');
+  const custom = document.getElementById("customRej")?.value.trim();
+  const note = custom || sel?.value || "Payment proof could not be verified.";
+
+  const payments = DB.payments();
+  const p = payments.find(x=>x.id===id);
+  if (!p) return toast("Payment not found");
+
+  p.status = "REJECTED";
+  p.adminNote = note;
+  DB.savePayments(payments);
+
+  document.getElementById("rejectModal")?.remove();
+  toast("❌ Payment rejected");
+  render();
+}
+
+/* =========================================================
+   ADMIN CUSTOMERS
+========================================================= */
+function adminCustomers(){
+  const customers = DB.customers().filter(c=>{
+    const expired = c.plan.expiryDate && new Date(c.plan.expiryDate+"T23:59:59Z") < new Date();
+    return c.plan.status === "ACTIVE" && !expired;
+  });
+  const cards = customers.map(c=>{
+    const remaining = daysLeft(c.plan.expiryDate);
+    const todayRecs = DB.attendance().filter(a=>a.customerId===c.id && a.date===today());
+    const present = todayRecs.filter(a=>a.status==="PRESENT").length;
+    return `
+    <div class="card">
+      <h2><i class="fa-solid fa-user-check"></i> ${esc(c.firstName)}</h2>
+      <div class="row"><span class="k">Accounts</span><span class="v">${c.accountCount}</span></div>
+      ${c.numbers.map((n,i)=>`<div class="row"><span class="k">Number ${i+1}</span><span class="v mono">${esc(n.phone)}</span></div>`).join("")}
+      <div class="row"><span class="k">Plan</span><span class="v">${PLANS[c.plan.planName].label}</span></div>
+      <div class="row"><span class="k">Start</span><span class="v">${c.plan.startDate}</span></div>
+      <div class="row"><span class="k">Expiry</span><span class="v">${c.plan.expiryDate}</span></div>
+      <div class="row"><span class="k">Remaining</span><span class="v" style="color:var(--gold)">${remaining} days</span></div>
+      <div class="row"><span class="k">Today's Attendance</span><span class="v">${present}/${c.accountCount} present</span></div>
+      <button class="btn btn-ghost btn-sm" style="width:100%;margin-top:10px" onclick="viewCustomer('${c.id}')">
+        <i class="fa-solid fa-eye"></i> VIEW DETAILS
+      </button>
+    </div>`;
+  }).join("") || `<div class="card"><div class="empty"><i class="fa-solid fa-users"></i>No active customers</div></div>`;
+
+  return `${header("ADMIN PANEL","Active Customers", true)}${adminTabs("/admin/customers")}${cards}<div style="height:30px"></div>`;
+}
+function viewCustomer(id){
+  const c = DB.customers().find(x=>x.id===id);
+  const att = DB.attendance().filter(a=>a.customerId===id).sort((a,b)=>b.date.localeCompare(a.date));
+  const history = att.slice(0,20).map(a=>{
+    const idx = c.numbers.findIndex(n=>n.id===a.numberId);
+    const b = a.status==="PRESENT" ? "✅" : a.status==="INCOMPLETE" ? "❌" : "⏳";
+    return `<div class="row"><span class="k">${a.date} • Number ${idx+1}</span><span class="v">${b} ${a.status}</span></div>`;
+  }).join("");
+  app().innerHTML = `
+  ${header("ADMIN PANEL","Customer Details", true)}
+  ${adminTabs("/admin/customers")}
+  <div class="card">
+    <h2><i class="fa-solid fa-user"></i> ${esc(c.firstName)}</h2>
+    <div class="row"><span class="k">Accounts</span><span class="v">${c.accountCount}</span></div>
+    <div class="row"><span class="k">Plan</span><span class="v">${PLANS[c.plan.planName].label}</span></div>
+    <div class="row"><span class="k">Duration</span><span class="v">${c.plan.durationDays} days</span></div>
+    <div class="row"><span class="k">Price / Number</span><span class="v">Rs. ${c.plan.pricePerNumber}</span></div>
+    <div class="row"><span class="k">Total</span><span class="v" style="color:var(--gold)">${fmt(c.plan.totalPrice)}</span></div>
+    <div class="row"><span class="k">Start</span><span class="v">${c.plan.startDate || "—"}</span></div>
+    <div class="row"><span class="k">Expiry</span><span class="v">${c.plan.expiryDate || "—"}</span></div>
+    <div class="row"><span class="k">Remaining</span><span class="v">${c.plan.expiryDate?daysLeft(c.plan.expiryDate):"—"} days</span></div>
+  </div>
+  <div class="card">
+    <h2><i class="fa-solid fa-mobile-screen"></i> My Telenor Accounts</h2>
+    ${c.numbers.map((n,i)=>`
+      <div class="acct">
+        <h4>Account ${i+1}</h4>
+        <div class="row"><span class="k">Number</span><span class="v mono">${esc(n.phone)}</span></div>
+        <div class="row"><span class="k">Password</span><span class="v mono">
+          <span onclick="this.textContent='${esc(n.pw)}'" style="cursor:pointer">•••••• (tap)</span>
+        </span></div>
+      </div>
+    `).join("")}
+  </div>
+  <div class="card">
+    <h2><i class="fa-solid fa-clock-rotate-left"></i> Attendance History</h2>
+    ${history || `<div class="empty">No records</div>`}
+  </div>
+  <div class="card">
+    <button class="btn btn-ghost" onclick="navigate('/admin/customers')">
+      <i class="fa-solid fa-arrow-left"></i> Back to list
+    </button>
+  </div>
+  <div style="height:30px"></div>`;
+}
+
+/* =========================================================
+   ADMIN ATTENDANCE
+========================================================= */
+function adminAttendance(){
+  const customers = DB.customers().filter(c=>{
+    return c.plan.status==="ACTIVE" && c.plan.expiryDate && new Date(c.plan.expiryDate+"T23:59:59Z") >= new Date();
+  });
+  const att = DB.attendance();
+  const todayAtt = att.filter(a=>a.date===today());
+  const cards = customers.map(c=>{
+    const nums = c.numbers.map((n,i)=>{
+      const rec = todayAtt.find(a=>a.numberId===n.id);
+      const st = rec?.status || "PENDING";
+      const isDone = st === "PRESENT";
+      return `<div class="acct">
+        <div class="row" style="padding:0 0 8px">
+          <span class="v mono">Number ${i+1} • ${esc(n.phone)}</span>
+          <span class="badge ${isDone?"green":st==="INCOMPLETE"?"red":"amber"}">${isDone?"✅ PRESENT":st==="INCOMPLETE"?"❌":"⏳ PENDING"}</span>
+        </div>
+        <button class="btn ${isDone?"btn-ghost":"btn-green"} btn-sm" style="width:100%"
+          onclick="markAttendance('${c.id}','${n.id}')" ${isDone?"disabled":""}>
+          <i class="fa-solid fa-check"></i> ${isDone ? "DONE" : "MARK PRESENT"}
+        </button>
+      </div>`;
+    }).join("");
+    return `<div class="card">
+      <h2><i class="fa-solid fa-user"></i> ${esc(c.firstName)}</h2>
+      <div class="row"><span class="k">Plan</span><span class="v">${PLANS[c.plan.planName].label}</span></div>
+      <div class="row"><span class="k">Remaining</span><span class="v" style="color:var(--gold)">${daysLeft(c.plan.expiryDate)} days</span></div>
+      <div class="divider"></div>${nums}
+    </div>`;
+  }).join("") || `<div class="card"><div class="empty"><i class="fa-solid fa-users"></i>No active customers today</div></div>`;
+  return `${header("ADMIN PANEL","Daily Attendance • "+today(), true)}${adminTabs("/admin/attendance")}${cards}<div style="height:30px"></div>`;
+}
+function markAttendance(customerId, numberId){
+  const att = DB.attendance();
+  const d = today();
+  let rec = att.find(a => a.numberId===numberId && a.date===d);
+  if (!rec){
+    rec = { id: uid(), customerId, numberId, date: d, status: "PRESENT", markedAt: nowISO(), markedBy: DB.session().username };
+    att.push(rec);
+  } else {
+    rec.status = "PRESENT"; rec.markedAt = nowISO(); rec.markedBy = DB.session().username;
+  }
+  DB.saveAttendance(att);
+  toast("Marked as PRESENT ✓");
+  render();
+}
+
+/* =========================================================
+   ADMIN HISTORY
+========================================================= */
+function adminHistory(){
+  const customers = DB.customers();
+  const payments = DB.payments();
+  const att = DB.attendance();
+  const payRows = payments.slice().reverse().map(p=>{
+    const c = customers.find(x=>x.id===p.customerId);
+    const badge = p.status==="APPROVED"?'<span class="badge green">APPROVED</span>'
+                : p.status==="REJECTED"?'<span class="badge red">REJECTED</span>'
+                : '<span class="badge amber">PENDING</span>';
+    return `<div class="card black" style="margin:0 0 10px;padding:14px">
+      <div class="row"><span class="k">${esc(c?.firstName||"?")}</span><span class="v">${badge}</span></div>
+      <div class="row"><span class="k">Amount</span><span class="v">${fmt(p.amount)}</span></div>
+      <div class="row"><span class="k">Submitted</span><span class="v">${new Date(p.submittedAt).toLocaleString()}</span></div>
+      ${p.adminNote?`<div class="row"><span class="k">Note</span><span class="v">${esc(p.adminNote)}</span></div>`:""}
+    </div>`;
+  }).join("") || `<div class="empty">No payments yet</div>`;
+  const grouped = {};
+  att.forEach(a=>{ (grouped[a.date] ||= []).push(a); });
+  const attRows = Object.keys(grouped).sort().reverse().slice(0,10).map(d=>{
+    const recs = grouped[d];
+    const present = recs.filter(r=>r.status==="PRESENT").length;
+    const inc = recs.filter(r=>r.status==="INCOMPLETE").length;
+    const pend = recs.filter(r=>r.status==="PENDING").length;
+    return `<div class="card black" style="margin:0 0 10px;padding:14px">
+      <div style="font-size:13px;color:var(--gold2);font-weight:600">${d}</div>
+      <div class="row"><span class="k">✅ Present</span><span class="v">${present}</span></div>
+      <div class="row"><span class="k">❌ Incomplete</span><span class="v">${inc}</span></div>
+      <div class="row"><span class="k">⏳ Pending</span><span class="v">${pend}</span></div>
+    </div>`;
+  }).join("") || `<div class="empty">No attendance yet</div>`;
+  return `${header("ADMIN PANEL","History", true)}${adminTabs("/admin/history")}
+  <div class="card"><h2><i class="fa-solid fa-clock-rotate-left"></i> Payment History</h2>${payRows}</div>
+  <div class="card"><h2><i class="fa-solid fa-calendar-days"></i> Attendance Summary</h2>${attRows}</div>
+  <div style="height:30px"></div>`;
+}
+
+/* =========================================================
+   NOT FOUND
+========================================================= */
+function notFound(){
+  return `${header()}
+  <div class="card" style="text-align:center;margin-top:30px">
+    <div style="font-size:48px">🤔</div>
+    <h2 style="justify-content:center">Page not found</h2>
+    <button class="btn btn-gold" style="margin-top:14px" onclick="navigate('/')">Home</button>
+  </div>`;
+}
+
+/* =========================================================
+   DAILY MAINTENANCE
+========================================================= */
+function dailyMaintenance(){
+  const last = DB.get("cs_last_maintenance", null);
+  const d = today();
+  if (last === d) return;
+  const customers = DB.customers();
+  const now = new Date();
+  customers.forEach(c=>{
+    if (c.plan.status==="ACTIVE" && c.plan.expiryDate && new Date(c.plan.expiryDate+"T23:59:59Z") < now){
+      c.plan.status = "EXPIRED";
+    }
+  });
+  DB.saveCustomers(customers);
+  const att = DB.attendance();
+  att.forEach(a=>{ if (a.status==="PENDING" && a.date < d){ a.status = "INCOMPLETE"; } });
+  customers.forEach(c=>{
+    if (c.plan.status==="ACTIVE"){
+      c.numbers.forEach(n=>{
+        const exists = att.find(a=>a.numberId===n.id && a.date===d);
+        if (!exists) att.push({
+          id: uid(), customerId: c.id, numberId: n.id, date: d,
+          status: "PENDING", markedAt: null, markedBy: null,
+        });
+      });
+    }
+  });
+  DB.saveAttendance(att);
+  DB.set("cs_last_maintenance", d);
+}
+
+/* =========================================================
+   BOOT
+========================================================= */
+dailyMaintenance();
+(function(){
+  const s = DB.session();
+  const hash = location.hash;
+  if (!hash || hash === "#/" || hash === "#"){
+    if (s && s.role === "ADMIN") location.hash = "#/admin";
+    else if (s && s.role === "CUSTOMER") location.hash = "#/dashboard";
+    else location.hash = "#/";
+  }
+})();
+render();
+setInterval(()=>{ dailyMaintenance(); render(); }, 5000);
+
+/* =========================================================
+   EXPORT GLOBALS
+========================================================= */
+Object.assign(window, {
+  navigate, doLogin, doLogout, doAdminLogin,
+  regSetCount, regSetPlan, regNumChange, submitRegistration, togglePw,
+  copyEasypaisa, handleSlip, submitPayment,
+  markSelf, viewSlip, approvePayment, showRejectModal, confirmReject,
+  viewCustomer, markAttendance,
+  regState: () => regState,
+});
+</script>
+</body>
+</html>
